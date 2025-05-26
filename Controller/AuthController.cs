@@ -1,5 +1,5 @@
+using DotNetProjectExample.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 [ApiController]
 [Route("/")]
@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
             return BadRequest(new { message = "Tài khoản đã tồn tại" });
         }
 
-        string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        string passwordHash = PasswordHelper.HashPassword(request.Password);
 
         var newUser = new User
         {
@@ -60,7 +60,7 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = "Tài khoản không tồn tại" });
         }
 
-        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
+        bool isPasswordValid = PasswordHelper.VerifyPassword(request.Password, user.PasswordHash);
 
         if (!isPasswordValid)
         {
